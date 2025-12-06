@@ -3,6 +3,7 @@
   "short_name": "Songbook",
   "description": "Search, save, and learn songs on any device.",
   "start_url": "/Songbook/",
+  "scope": "/Songbook/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2563eb",
@@ -20,3 +21,4 @@
     }
   ]
 }
+
