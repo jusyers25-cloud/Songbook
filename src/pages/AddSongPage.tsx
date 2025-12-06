@@ -297,237 +297,260 @@ export default function AddSongPage() {
   };
 
   return (
-    <div className="p-4 space-y-4 relative" style={{ maxWidth: 400 }}>
-      {!user ? (
-        showSignup ? (
-          <form onSubmit={handleSignup} className="space-y-2">
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              autoComplete="username"
-              required
-            />
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              autoComplete="new-password"
-              required
-            />
-            <div className="flex items-center gap-2">
-              <Button type="submit">Sign Up</Button>
-              <Button type="button" onClick={() => { setShowSignup(false); setLoginError(null); }}>Back to Log In</Button>
+    <div className="min-h-screen bg-background p-4">
+      <div className="max-w-md mx-auto space-y-6 py-8">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <h1 className="text-3xl font-bold text-foreground mb-6">🎸 Songbook</h1>
+          
+          {!user ? (
+            <div className="w-full bg-card rounded-2xl shadow-2xl p-8 border border-border">
+              {showSignup ? (
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <h2 className="text-2xl font-semibold text-foreground mb-4">Create Account</h2>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    autoComplete="username"
+                    className="h-12"
+                    required
+                  />
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    autoComplete="new-password"
+                    className="h-12"
+                    required
+                  />
+                  <Button type="submit" className="w-full h-12 text-lg">Sign Up</Button>
+                  <Button type="button" variant="ghost" className="w-full" onClick={() => { setShowSignup(false); setLoginError(null); }}>
+                    Already have an account? Log in
+                  </Button>
+                  {loginError && <div className="text-destructive text-sm mt-2 p-3 bg-destructive/10 rounded-lg">{loginError}</div>}
+                </form>
+              ) : (
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <h2 className="text-2xl font-semibold text-foreground mb-4">Welcome Back</h2>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    autoComplete="username"
+                    className="h-12"
+                    required
+                  />
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    autoComplete="current-password"
+                    className="h-12"
+                    required
+                  />
+                  <Button type="submit" className="w-full h-12 text-lg">Log In</Button>
+                  <Button type="button" variant="ghost" className="w-full" onClick={() => setShowSignup(true)}>
+                    Don't have an account? Sign up
+                  </Button>
+                  {loginError && <div className="text-destructive text-sm mt-2 p-3 bg-destructive/10 rounded-lg">{loginError}</div>}
+                </form>
+              )}
             </div>
-            {loginError && <div className="text-red-600 text-sm">{loginError}</div>}
-          </form>
-        ) : (
-          <form onSubmit={handleLogin} className="space-y-2">
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              autoComplete="username"
-              required
-            />
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              autoComplete="current-password"
-              required
-            />
-            <div className="flex items-center gap-2">
-              <Button type="submit">Log In</Button>
-              <Button type="button" onClick={() => { setEmail(''); setPassword(''); setLoginError(null); }}>Clear</Button>
-            </div>
-            <div className="text-sm">
-              Don't have an account? <button type="button" className="text-blue-600 underline" onClick={() => setShowSignup(true)}>Sign up</button>
-            </div>
-            {loginError && <div className="text-red-600 text-sm">{loginError}</div>}
-          </form>
-        )
-      ) : (
-        <>
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-green-700">Logged in as: {user.email}</div>
-            <Button variant="ghost" onClick={handleLogout}>Log out</Button>
-          </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between bg-card rounded-xl p-4 shadow-lg border border-border">
+                <div className="text-sm text-muted-foreground">
+                  <span className="text-foreground font-medium">{user.email}</span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-foreground">Log out</Button>
+              </div>
 
-          <div className="flex gap-2 mt-2">
-            <button
-              className={`px-3 py-1 rounded ${activeTab === 'search' ? 'bg-gray-200' : 'bg-white'}`}
-              onClick={() => setActiveTab('search')}
-            >Search</button>
-            <button
-              className={`px-3 py-1 rounded ${activeTab === 'my' ? 'bg-gray-200' : 'bg-white'}`}
-              onClick={() => setActiveTab('my')}
-            >My Songbook</button>
-            <button
-              className={`px-3 py-1 rounded ${activeTab === 'saved' ? 'bg-gray-200' : 'bg-white'}`}
-              onClick={() => setActiveTab('saved')}
-            >Saved</button>
-          </div>
+              <div className="flex gap-2 bg-card rounded-xl p-2 shadow-lg border border-border">
+                <button
+                  className={`flex-1 px-4 py-3 rounded-lg font-medium transition-all ${activeTab === 'search' ? 'bg-primary text-primary-foreground shadow-md' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+                  onClick={() => setActiveTab('search')}
+                >Search</button>
+                <button
+                  className={`flex-1 px-4 py-3 rounded-lg font-medium transition-all ${activeTab === 'my' ? 'bg-primary text-primary-foreground shadow-md' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+                  onClick={() => setActiveTab('my')}
+                >My Songs</button>
+                <button
+                  className={`flex-1 px-4 py-3 rounded-lg font-medium transition-all ${activeTab === 'saved' ? 'bg-primary text-primary-foreground shadow-md' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+                  onClick={() => setActiveTab('saved')}
+                >Saved</button>
+              </div>
 
-          <div className="mt-3">
-            {activeTab === 'search' && (
-              <>
-                <Input
-                  value={title}
-                  onChange={handleChange}
-                  onBlur={handleInputBlur}
-                  onFocus={handleInputFocus}
-                  placeholder="Type a song name..."
-                  autoComplete="off"
-                />
-              </>
-            )}
+              <div className="bg-card rounded-xl p-6 shadow-lg border border-border relative">
+                {activeTab === 'search' && (
+                  <div className="relative">
+                    <Input
+                      value={title}
+                      onChange={handleChange}
+                      onBlur={handleInputBlur}
+                      onFocus={handleInputFocus}
+                      placeholder="Search for songs..."
+                      autoComplete="off"
+                      className="h-14 text-lg pl-12 pr-4"
+                    />
+                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                )}
 
-            {activeTab === 'my' && (
-              <div>
-                {learningSongs.length === 0 ? (
-                  <div className="text-gray-500">No songs in My Songbook.</div>
-                ) : (
-                  <ul className="list-disc ml-6 space-y-1">
-                    {learningSongs.map((song) => (
-                      <li key={song.id} className="flex items-center justify-between">
-                        <div>
-                          {song.title} <span className="text-gray-500">{song.artist}</span>
+                {activeTab === 'my' && (
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-4">My Songbook</h3>
+                    {learningSongs.length === 0 ? (
+                      <div className="text-muted-foreground text-center py-8">No songs yet. Start searching!</div>
+                    ) : (
+                      <ul className="space-y-2">
+                        {learningSongs.map((song) => (
+                          <li key={song.id} className="flex items-center justify-between bg-muted/30 p-4 rounded-lg hover:bg-muted/50 transition-colors">
+                            <div>
+                              <div className="font-medium text-foreground">{song.title}</div>
+                              <div className="text-sm text-muted-foreground">{song.artist}</div>
                         </div>
-                        <button
-                          className="text-xs px-2 py-0.5 bg-red-100 rounded hover:bg-red-200 w-6 h-6 flex items-center justify-center"
-                          aria-label="Remove learning song"
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            if (!user?.id) { addToast('Please log in to remove songs.', 'info'); return; }
-                            if (!song.id) { addToast('Song id missing.', 'error'); return; }
-                            const { error } = await supabase
-                              .from('learning_songs')
-                              .delete()
-                              .match({ user_id: user.id, song_id: song.id });
-                            if (error) {
-                              addToast('Error removing learning song: ' + error.message, 'error');
-                            } else {
-                              await fetchLists(user.id);
-                              addToast('Removed from My Songbook', 'success');
-                            }
-                          }}
-                        >×</button>
-                      </li>
-                    ))}
-                  </ul>
+                            <button
+                              className="text-xs px-3 py-1 bg-destructive/20 text-destructive rounded-lg hover:bg-destructive/30 transition-colors font-medium"
+                              aria-label="Remove learning song"
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                if (!user?.id) { addToast('Please log in to remove songs.', 'info'); return; }
+                                if (!song.id) { addToast('Song id missing.', 'error'); return; }
+                                const { error } = await supabase
+                                  .from('learning_songs')
+                                  .delete()
+                                  .match({ user_id: user.id, song_id: song.id });
+                                if (error) {
+                                  addToast('Error removing learning song: ' + error.message, 'error');
+                                } else {
+                                  await fetchLists(user.id);
+                                  addToast('Removed from My Songbook', 'success');
+                                }
+                              }}
+                            >Remove</button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+                {activeTab === 'saved' && (
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-4">Saved for Later</h3>
+                    {savedSongs.length === 0 ? (
+                      <div className="text-muted-foreground text-center py-8">No saved songs yet.</div>
+                    ) : (
+                      <ul className="space-y-2">
+                        {savedSongs.map((song) => (
+                          <li key={song.id} className="flex items-center justify-between bg-muted/30 p-4 rounded-lg hover:bg-muted/50 transition-colors">
+                            <div>
+                              <div className="font-medium text-foreground">{song.title}</div>
+                              <div className="text-sm text-muted-foreground">{song.artist}</div>
+                            </div>
+                            <button
+                              className="text-xs px-3 py-1 bg-destructive/20 text-destructive rounded-lg hover:bg-destructive/30 transition-colors font-medium"
+                              aria-label="Remove saved song"
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                if (!user?.id) { addToast('Please log in to remove songs.', 'info'); return; }
+                                if (!song.id) { addToast('Song id missing.', 'error'); return; }
+                                const { error } = await supabase
+                                  .from('saved_songs')
+                                  .delete()
+                                  .match({ user_id: user.id, song_id: song.id });
+                                if (error) {
+                                  addToast('Error removing saved song: ' + error.message, 'error');
+                                } else {
+                                  await fetchLists(user.id);
+                                  addToast('Removed from Saved', 'success');
+                                }
+                              }}
+                            >Remove</button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
-            {activeTab === 'saved' && (
-              <div>
-                {savedSongs.length === 0 ? (
-                  <div className="text-gray-500">No songs in Saved.</div>
-                ) : (
-                  <ul className="list-disc ml-6 space-y-1">
-                    {savedSongs.map((song) => (
-                      <li key={song.id} className="flex items-center justify-between">
-                        <div>
-                          {song.title} <span className="text-gray-500">{song.artist}</span>
-                        </div>
-                        <button
-                          className="text-xs px-2 py-0.5 bg-red-100 rounded hover:bg-red-200 w-6 h-6 flex items-center justify-center"
-                          aria-label="Remove saved song"
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            if (!user?.id) { addToast('Please log in to remove songs.', 'info'); return; }
-                            if (!song.id) { addToast('Song id missing.', 'error'); return; }
-                            const { error } = await supabase
-                              .from('saved_songs')
-                              .delete()
-                              .match({ user_id: user.id, song_id: song.id });
-                            if (error) {
-                              addToast('Error removing saved song: ' + error.message, 'error');
-                            } else {
-                              await fetchLists(user.id);
-                              addToast('Removed from Saved', 'success');
-                            }
-                          }}
-                        >×</button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
-          </div>
-        </>
-      )}
-      {showDropdown && (
-        <div onMouseLeave={() => setShowDropdown(false)} className="absolute z-10 bg-white border rounded shadow w-full mt-1 max-h-60 overflow-auto">
-          {results.map((song, idx) => (
-            <div
-              key={song.id || idx}
-              className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-100"
-              onClick={() => handleSelect(song)}
-            >
-              <div>
-                <div className="font-semibold">{song.title}</div>
-                <div className="text-sm text-gray-500">{song.artist}</div>
-              </div>
-              <div className="flex gap-1 ml-2" onClick={e => e.stopPropagation()}>
-                {savedSongs.find(s => s.id === song.id) ? (
-                  <span className="text-xs px-2 py-1 bg-blue-50 rounded text-blue-700">Saved</span>
-                ) : (
-                  <button
-                    className="text-xs px-2 py-1 bg-blue-100 rounded hover:bg-blue-200"
-                    title="Save for Later"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (!user?.id) { addToast('Please log in to save songs.', 'info'); return; }
-                      if (!song.id) { addToast('Song id missing — please try again or refresh the list.', 'error'); return; }
-                      performImmediateAction('save', song);
-                    }}
-                  >
-                    ☆
-                  </button>
-                )}
-
-                {learningSongs.find(s => s.id === song.id) ? (
-                  <span className="text-xs px-2 py-1 bg-green-50 rounded text-green-700">Learning</span>
-                ) : (
-                  <button
-                    className="text-xs px-2 py-1 bg-green-100 rounded hover:bg-green-200"
-                    title="Actively Learning"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (!user?.id) { addToast('Please log in to save songs.', 'info'); return; }
-                      if (!song.id) { addToast('Song id missing — please try again or refresh the list.', 'error'); return; }
-                      performImmediateAction('learn', song);
-                    }}
-                  >
-                    ➤
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-          {results.length === 0 && (
-            <div className="px-4 py-2 text-gray-400">No songs found</div>
+            </>
           )}
         </div>
-      )}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 space-y-2">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={
-              `px-4 py-2 rounded shadow ${t.type === 'success' ? 'bg-green-100 text-green-800' : t.type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`
-            }
-          >
-            {t.message}
+
+        {showDropdown && (
+          <div onMouseLeave={() => setShowDropdown(false)} className="absolute z-50 bg-card border border-border rounded-xl shadow-2xl w-full mt-2 max-h-80 overflow-auto">
+            {results.map((song, idx) => (
+              <div
+                key={song.id || idx}
+                className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-muted/50 transition-colors border-b border-border last:border-0"
+                onClick={() => handleSelect(song)}
+              >
+                <div className="flex-1">
+                  <div className="font-semibold text-foreground">{song.title}</div>
+                  <div className="text-sm text-muted-foreground">{song.artist}</div>
+                </div>
+                <div className="flex gap-2 ml-4" onClick={e => e.stopPropagation()}>
+                  {savedSongs.find(s => s.id === song.id) ? (
+                    <span className="text-xs px-3 py-1.5 bg-secondary/20 text-secondary rounded-lg font-medium">Saved</span>
+                  ) : (
+                    <button
+                      className="text-xs px-3 py-1.5 bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors font-medium"
+                      title="Save for Later"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!user?.id) { addToast('Please log in to save songs.', 'info'); return; }
+                        if (!song.id) { addToast('Song id missing — please try again or refresh the list.', 'error'); return; }
+                        performImmediateAction('save', song);
+                      }}
+                    >
+                      Save
+                    </button>
+                  )}
+
+                  {learningSongs.find(s => s.id === song.id) ? (
+                    <span className="text-xs px-3 py-1.5 bg-primary/20 text-primary rounded-lg font-medium">Learning</span>
+                  ) : (
+                    <button
+                      className="text-xs px-3 py-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors font-medium"
+                      title="Add to Songbook"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!user?.id) { addToast('Please log in to save songs.', 'info'); return; }
+                        if (!song.id) { addToast('Song id missing — please try again or refresh the list.', 'error'); return; }
+                        performImmediateAction('learn', song);
+                      }}
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+            {results.length === 0 && (
+              <div className="px-4 py-6 text-muted-foreground text-center">No songs found</div>
+            )}
           </div>
-        ))}
+        )}
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 space-y-2">
+          {toasts.map((t) => (
+            <div
+              key={t.id}
+              className={
+                `px-4 py-2 rounded-lg shadow-lg backdrop-blur-sm ${t.type === 'success' ? 'bg-green-500/90 text-white' : t.type === 'error' ? 'bg-red-500/90 text-white' : 'bg-primary/90 text-white'}`
+              }
+            >
+              {t.message}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
+
